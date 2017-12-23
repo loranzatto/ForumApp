@@ -7,11 +7,12 @@ import { Http } from '@angular/http'
    styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+
    constructor(private _httpService: Http) { }
    apiValues: string[] = [];
    ngOnInit() {
       this._httpService.get('/api/forum').subscribe(values => {
          this.apiValues = values.json() as string[];
       });
-   }
+   }    
 }

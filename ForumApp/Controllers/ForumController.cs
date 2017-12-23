@@ -15,7 +15,7 @@ namespace ForumApp.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "value1", "value2", "value3", "value4" };
         }
 
         // GET api/<controller>/5
@@ -27,14 +27,16 @@ namespace ForumApp.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public object Post([FromBody] object value)
         {
+            return value;
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
+            id.ToString();
         }
 
         // DELETE api/<controller>/5
