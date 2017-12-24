@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Http } from '@angular/http'
+import { ToastsManager } from 'ng2-toastr';
+
 
 @Component({
    selector: 'app-root',
@@ -8,11 +10,11 @@ import { Http } from '@angular/http'
 })
 export class AppComponent implements OnInit {
 
-   constructor(private _httpService: Http) { }
+   constructor(private httpService: Http, private toastr: ToastsManager, private vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+   }
    apiValues: string[] = [];
    ngOnInit() {
-      this._httpService.get('/api/forum').subscribe(values => {
-         this.apiValues = values.json() as string[];
-      });
+     
    }    
 }

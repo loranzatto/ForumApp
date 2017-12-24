@@ -8,6 +8,9 @@ namespace ForumApp.Interfaces
 {
   interface IUserModel : IAppModel
   {
-    void toInsert(User user);
+    void insert(User user);
+    int count(string id);
+    List<User> get();
+
   }
 }

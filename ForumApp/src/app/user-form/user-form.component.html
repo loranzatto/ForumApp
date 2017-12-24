@@ -1,24 +1,73 @@
 <form [formGroup]="userForm" novalidate (ngSubmit)="onSubmit()">
-  <div class="form-group">
+  
+  <div class="form-group" [ngClass]="{
+                                'has-success':id.valid && (id.dirty || id.touched),
+                                'has-danger':id.invalid && (id.dirty || id.touched)
+                          }">
     <label for="userId">User ID</label>
     <input id="userId" type="text" class="form-control" formControlName="id">
+    <div class="form-control-feedback"
+         *ngIf="id.errors && (id.dirty || id.touched)">
+      <p *ngIf="id.errors.required">User ID is Required!</p>
+      <p *ngIf="id.errors.minlength">User ID must contain at least 5 characters!</p>
+      <p *ngIf="id.errors.maxlength">User ID must contain maximum 15 characters!</p>
+    </div>
   </div>
-  <div class="form-group">
+
+  <div class="form-group" [ngClass]="{
+                              'has-success':name.valid && (name.dirty || name.touched),
+                              'has-danger':name.invalid && (name.dirty || name.touched)
+                           }" >
     <label for="userName">Name</label>
     <input id="userName" type="text" class="form-control" formControlName="name">
+    <div class="form-control-feedback"
+         *ngIf="name.errors && (name.dirty || name.touched)">
+      <p *ngIf="name.errors.required">Name is Required!</p>
+      <p *ngIf="name.errors.maxlength">Name must contain maximum 70 characters!</p>
+    </div>
   </div>
-  <div class="form-group">
+
+  <div class="form-group" [ngClass]="{
+                              'has-success':email.valid && (email.dirty || email.touched),
+                              'has-danger':email.invalid && (email.dirty || email.touched)
+                           }" >
     <label for="email">Email</label>
     <input id="email" type="text" class="form-control" formControlName="email">
+    <div class="form-control-feedback"
+         *ngIf="email.errors && (email.dirty || email.touched)">
+      <p *ngIf="email.errors.required">Email is Required!</p>
+      <p *ngIf="email.errors.pattern">Email must contain the @ characters!</p>
+      <p *ngIf="email.errors.maxlength">Email must contain maximum 100 characters!</p>
+    </div>
   </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input id="password" type="password" class="form-control" formControlName="password">
+
+  <div class="form-group" [ngClass]="{
+                              'has-success':password.valid && (password.dirty || password.touched),
+                              'has-danger':password.invalid && (password.dirty || password.touched)
+                           }" >
+     <label for="password">Password</label>
+     <input id="password" type="password" class="form-control" formControlName="password">
+     <div class="form-control-feedback"
+         *ngIf="password.errors && (password.dirty || password.touched)">
+      <p *ngIf="password.errors.required">Password is Required!</p>
+      <p *ngIf="password.errors.minlength">Password must contain at least 8 characters!</p>
+      <p *ngIf="password.errors.maxlength">Password must contain maximum 15 characters!</p>
+    </div>
   </div>
-  <div class="form-group">
-    <label for="rePassword">RePassword</label>
-    <input id="rePassword" type="password" class="form-control" formControlName="rePassword">
-  </div>
+  
   <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+  <tbody>
+    <tr *ngFor="let user of _users">
+        <td class="text-center" style="width: 15px;">{{user.id}}</td>
+        <td class="text-center" style="width: 15px;">{{user.name}}</td>
+        <td class="text-center" style="width: 200px;">{{user.email}}</td>
+        <td class="text-center">{{user.password}}</td>
+    </tr>
+  </tbody>
+  <!--<button type="submit" class="btn btn-primary" [disabled]="submitPending || companyForm.pending">
+    Save
+    <span *ngIf="submitPending"
+           class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+  </button>-->
 </form>
-<pre>{{ userForm.value | json }}</pre>
+<!--<pre>{{ userForm.value | json }}</pre> -->

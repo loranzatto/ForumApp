@@ -12,18 +12,21 @@ namespace ForumApp.Models
     {
 
     }
-    public void toInsert(User user)
+    public List<User> get()
     {
-      try
-      {
-        ForumContext context = getContext();
-        context.User.Add(user);
-        context.SaveChanges();
-      }
-      catch (Exception e)
-      {
-        throw e;
-      }
+      ForumContext context = getContext();
+      return context.User.ToList();
+    }
+    public void insert(User user)
+    {      
+      ForumContext context = getContext();
+      context.User.Add(user);
+      context.SaveChanges();           
+    }
+    public int count(string id)
+    {      
+      ForumContext context = getContext();
+      return context.User.Where(user => user.Id == id).Count();
     }
 
   }
