@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { UserFormComponent } from './user-form/user-form.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {RouterModule, Routes} from '@angular/router'
 
 @NgModule({
   declarations: [
@@ -15,8 +16,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule
-    //NgbModule.forRoot(),
+    HttpModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]
