@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
+import {Http, Headers, RequestOptions, URLSearchParams} from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { IUser } from './user-form/user-form.component';
+import { IUser, User } from './user-form/user-form.component';
 
 @Injectable()
 export class AppService {
@@ -16,18 +16,22 @@ export class AppService {
     console.log(body);
     return this._httpService.post('/api/forum/', body, options);
   }
+ /*
+  get(Id :string): Observable<IUser[]> {
+    let headers = new Headers({ 'Content-Type': 
+    'application/json; charset=utf-8' });
+    let options = new RequestOptions({ headers: headers });
+    //let searchParams = new URLSearchParams();
+    //searchParams.set('Id', Id);
+    console.log('/api/forum/'+Id, options);
+    //return this._httpService
+    //    .get('/api/forum/'+ Id)
+    //    .map(response => {return <IUser[]>response.json()}).catch(this.handleError);
+  } 
+  */
+  count(Id){
+      return this._httpService.get('/api/forum/'+ Id);
+  }
  
-  getPosts(): Observable<IUser[]> {
-    return this._httpService
-        .get('/api/forum/')
-        .map(response => {return <IUser[]>response.json()}).catch(this.handleError);
-  }
-  get() {    
-    
-    return this._httpService.get('/api/forum/');
-  }
-  private handleError(error: Response) {
-    return Observable.throw(error.statusText);
-}
 
 }

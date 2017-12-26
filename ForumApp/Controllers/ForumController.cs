@@ -21,19 +21,22 @@ namespace ForumApp.Controllers
       _iUserModel = new UserModel();
     }
     // GET: api/<controller>
-    [HttpGet]
-    public IEnumerable<User> Get()
-    {      
-      return _iUserModel.get();
-    }
 
-    // GET api/<controller>/5
-    [HttpGet("{id}")]
+    //[Route(template: "api/{controller}/{id}")]
+    [HttpGet("{Id}")]
     public int Get(string id)
-    {
-      int count = _iUserModel.count(id);
-      return count;
+    {     
+      return _iUserModel.count(id);
     }
+    /*
+    // GET api/<controller>/5
+    [HttpGet("{Id}")]
+    public int Get()
+    {
+      //int count = _iUserModel.count();
+      return 0;
+    }
+    */
 
     // POST api/<controller>
     [HttpPost]

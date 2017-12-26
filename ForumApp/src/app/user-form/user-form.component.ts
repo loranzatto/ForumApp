@@ -8,6 +8,7 @@ import { AppService} from '../app.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable } from 'rxjs/Rx';
+import { async } from 'q';
 //import { FormControl } from '@angular/forms/src/model';
 //import { FormGroup } from '@angular/forms/src/model';
 
@@ -23,8 +24,6 @@ export class UserFormComponent implements OnInit {
   name: FormControl;
   email: FormControl;
   password: FormControl;
-  submitPending: boolean;
-  _users: IUser[];
 
   constructor(private appService:AppService, private toastr: ToastsManager){
   }
@@ -47,7 +46,9 @@ export class UserFormComponent implements OnInit {
     this.createFormControls()
     this.createForm()
   }
-  onSubmit(){
+
+  
+  async onSubmit(){
     
     if(this.userForm.valid){
       let user = new User();
@@ -58,27 +59,37 @@ export class UserFormComponent implements OnInit {
       user.CreationDate = null;
       user.UpdateDate = null;
       
-      let count;
-      //this.appService.get().subscribe(res => count = res.text());
-      this.appService.getPosts().subscribe(resultArray => {this._users = resultArray;
-                                                           console.log(this._users)
-                                                          }, error => console.log("Error :: " + error));
+      let userExist = true;
+      let count: number;
+     
+        
+      await new Promise(resolve => {this.appService.count(user.Id)
+                                                  .map(response => {return <Number>response.json()}).catch(this.handleError)
+                                                  .subscribe(resultArray => {count = resultArray;
+                                                                                console.log(count);
+                                                                                if(count > 0){
+                                                                                  userExist = false;
+                                                                                  console.log(userExist);
+                                                                                  this.userForm.get('id').setErrors({backend: {}});
+                                                                                  this.toastr.error('User ID already exists.', 'Fail!');  
+                                                                                }
+                                                                                resolve();
+                                                                              }, error => console.log("Error :: " + error));
+                                    });
 
-      //if(count > 0){
-      //console.log(this._users);
-      //}
       
-      this.submitPending = true;
-      this.appService.add(user).toPromise().then(data => {}).catch();
-
-      this.toastr.success('Successfully added user.', 'Success!');   
-      this.submitPending = false;
-
-      this.userForm.reset();
-    }     
+      if(userExist){
+        await new Promise(resolve => {this.appService.add(user).toPromise().then(data => {resolve()}).catch()});
+        this.toastr.success('Successfully added user.', 'Success!');
+        this.userForm.reset();
+      }      
+    }         
+  }
+  private handleError(error: Response) {
+    return Observable.throw(error.statusText);
   }
 }
-class User{
+export class User{
   Id: string;
   Name: string;
   Email: string;

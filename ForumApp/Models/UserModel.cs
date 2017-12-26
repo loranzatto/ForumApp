@@ -15,18 +15,20 @@ namespace ForumApp.Models
     public List<User> get()
     {
       ForumContext context = getContext();
-      return context.User.ToList();
+      List<User> userLst = context.User.ToList();
+      return userLst;
     }
     public void insert(User user)
     {      
       ForumContext context = getContext();
       context.User.Add(user);
-      context.SaveChanges();           
+      context.SaveChanges();
     }
     public int count(string id)
     {      
       ForumContext context = getContext();
-      return context.User.Where(user => user.Id == id).Count();
+      int count = context.User.Where(user => user.Id == id).Count();
+      return count;
     }
 
   }
