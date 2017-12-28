@@ -16,22 +16,19 @@ export class AppService {
     console.log(body);
     return this._httpService.post('/api/forum/', body, options);
   }
- /*
-  get(Id :string): Observable<IUser[]> {
-    let headers = new Headers({ 'Content-Type': 
-    'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-    //let searchParams = new URLSearchParams();
-    //searchParams.set('Id', Id);
-    console.log('/api/forum/'+Id, options);
-    //return this._httpService
-    //    .get('/api/forum/'+ Id)
-    //    .map(response => {return <IUser[]>response.json()}).catch(this.handleError);
-  } 
-  */
   count(Id){
       return this._httpService.get('/api/forum/'+ Id);
   }
- 
+  get(object){
+    let headers = new Headers({ 'Content-Type': 
+    'application/json; charset=utf-8' });
+    let options = new RequestOptions({ headers: headers });
+    let body = JSON.stringify(object);
+    console.log(body);
+    return this._httpService.post('/api/forum/', body, options);
+  }
+  public handleError(error: Response) {
+    return Observable.throw(error.statusText);
+  }
 
 }

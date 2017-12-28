@@ -7,8 +7,10 @@ namespace ForumApp.Models
     public partial class ForumContext : DbContext
     {
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Topic> Topic { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
@@ -20,11 +22,11 @@ namespace ForumApp.Models
         {
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .ValueGeneratedNever();
+              entity.Property(e => e.Id)
+                  .HasColumnName("id")
+                  .HasMaxLength(15)
+                  .IsUnicode(false)
+                  .ValueGeneratedNever();
 
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
@@ -43,6 +45,37 @@ namespace ForumApp.Models
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasColumnName("password")
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpdateDate).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Topic>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .IsUnicode(false)
+                    .ValueGeneratedOnAdd()             
+                    .UseSqlServerIdentityColumn();
+
+              entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasColumnName("title")
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasColumnName("description")
+                    .HasMaxLength(70)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasColumnName("UserId")
                     .HasMaxLength(15)
                     .IsUnicode(false);
 

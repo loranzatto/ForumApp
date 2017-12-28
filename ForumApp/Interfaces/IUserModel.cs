@@ -11,6 +11,6 @@ namespace ForumApp.Interfaces
     void insert(User user);
     int count(string id);
     List<User> get();
-
+    User get(string id, string password);
   }
 }

@@ -15,10 +15,14 @@ namespace ForumApp.Controllers
   public class ForumController : Controller
   {
     private IUserModel _iUserModel;
+    private ITopicModel _iTopicModel;
+
 
     public ForumController()
     {
       _iUserModel = new UserModel();
+      _iTopicModel = new TopicModel();
+
     }
     // GET: api/<controller>
 
@@ -27,7 +31,7 @@ namespace ForumApp.Controllers
     public int Get(string id)
     {     
       return _iUserModel.count(id);
-    }
+    }    
     /*
     // GET api/<controller>/5
     [HttpGet("{Id}")]
@@ -42,16 +46,57 @@ namespace ForumApp.Controllers
     [HttpPost]
     public object Post([FromBody] JObject jObject)
     {
-      dynamic json = jObject;
-      User user = new User();
-      user.Id = json.Id;
-      user.Name = json.Name;
-      user.Email = json.Email;
-      user.Password = json.Password;
-      user.CreationDate = DateTime.Now;
+      
+      object returnedObject = null;
 
-      _iUserModel.insert(user);
-      return "Suceeded";
+      dynamic json = jObject;
+      string processType = json.ProcessType;
+      string classType = json.ClassType;
+
+      switch (classType)
+      {
+        case "User":
+          {
+            User user = new User();
+            returnedObject = new User();
+
+            user.Id = json.Id;
+            user.Name = json.Name;
+            user.Email = json.Email;
+            user.Password = json.Password;
+            user.CreationDate = DateTime.Now;
+
+            if (processType != "get")
+            {
+              _iUserModel.insert(user);
+            }
+            else
+            {
+              returnedObject = _iUserModel.get(user.Id, user.Password);
+            }
+            break;
+          }
+        case "Topic":
+          {
+            Topic topic = new Topic();
+            returnedObject = new Topic();
+
+            topic.Title = json.Title;
+            topic.Description = json.Description;
+            topic.UserId = json.UserId;
+            topic.CreationDate = DateTime.Now;
+
+            if (processType != "get")
+            {
+              _iTopicModel.insert(topic);
+            }
+            break;
+          }
+      }
+
+      
+
+      return returnedObject != null ? returnedObject : null;
     }
 
     // PUT api/<controller>/5

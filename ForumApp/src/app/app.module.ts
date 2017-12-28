@@ -17,12 +17,16 @@ import { AppComponent } from './app.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { HeaderFormComponent } from './header-form/header-form.component';
 import { SignInFormComponent } from './sign-in-form/sign-in-form.component';
+import { TopicFormComponent } from './topic-form/topic-form.component';
+import { CommentFormComponent } from './comment-form/comment-form.component';
+import { Globals } from './globals';
 
 
 const routes : Routes = [
-  { path: '', component: SignInFormComponent, pathMatch:'full'},
+  { path: '', component: UserFormComponent, pathMatch:'full'},
   { path: 'user-form', component: UserFormComponent},
-  { path: 'sign-in-form', component: SignInFormComponent}
+  { path: 'sign-in-form', component: SignInFormComponent},
+  { path: 'topic-form', component: TopicFormComponent}
 ];
 
 @NgModule({
@@ -30,7 +34,7 @@ const routes : Routes = [
     AppComponent,
     UserFormComponent,    
     HeaderFormComponent, 
-    SignInFormComponent    
+    SignInFormComponent, TopicFormComponent, CommentFormComponent    
   ],
   imports: [
     BrowserModule,
@@ -47,7 +51,9 @@ const routes : Routes = [
     
   ],
   entryComponents:[SignInFormComponent],
-  providers: [AppService, ToastOptions, BsModalService],
+  providers: [AppService, ToastOptions, BsModalService, Globals],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  public static sessionId: string;
+ }

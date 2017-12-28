@@ -18,6 +18,12 @@ namespace ForumApp.Models
       List<User> userLst = context.User.ToList();
       return userLst;
     }
+    public User get(string id, string password)
+    {
+      ForumContext context = getContext();
+      User user = context.User.Where(u => u.Id == id && u.Password == password).SingleOrDefault();
+      return user;
+    }
     public void insert(User user)
     {      
       ForumContext context = getContext();

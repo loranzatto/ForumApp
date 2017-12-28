@@ -1,10 +1,36 @@
-<button type="button" class="btn btn-primary" (click)="openModal(template)">Open modal</button>
 <br><br>
 <pre>{{message}}</pre>
 <ng-template #template>
-  <div class="modal-body text-center">
-    <p>Do you want to confirm?</p>
-    <button type="button" class="btn btn-default" (click)="confirm()" >Yes</button>
-    <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
+  <div class="modal-body text-left padding">
+    <form [formGroup]="signInForm" novalidate>
+      <p class="modal-body text-center"><strong>IT</strong> Forum</p>
+      <div class="form-group col-md-20" [ngClass]="{
+                                                    'has-success':id.valid && (id.dirty || id.touched),
+                                                    'has-danger':id.invalid && (id.dirty || id.touched)
+                                                  }">
+        <label for="userId">User ID</label>
+        <input id="userId" type="text" class="form-control" formControlName="id">
+        <div class="form-control-feedback" 
+             *ngIf="id.errors && (id.dirty || id.touched)">
+          <p *ngIf="id.errors.required">User ID is Required!</p>        
+        </div>
+      </div>
+
+      <div class="form-group col-md-20" [ngClass]="{
+                                                  'has-success':password.valid && (password.dirty || password.touched),
+                                                  'has-danger':password.invalid && (password.dirty || password.touched)
+                                                  }" >
+        <label for="password">Password</label>
+        <input id="password" type="password" class="form-control" formControlName="password">
+        <div class="form-control-feedback"
+             *ngIf="password.errors && (password.dirty || password.touched)">
+          <p *ngIf="password.errors.required">Password is Required!</p>         
+        </div>
+      </div>
+      <div class="form-group text-center">
+        <button type="button" class="btn btn-primary" (click)="confirm()" >Sign In</button>
+        <button type="button" class="btn btn-default" (click)="decline()" >Cancel</button>
+    </div>
+    </form>
   </div>
 </ng-template>
