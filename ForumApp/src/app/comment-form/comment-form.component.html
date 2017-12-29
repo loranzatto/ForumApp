@@ -1,3 +1,19 @@
-<p>
-  comment-form works!
-</p>
+<form [formGroup]="commentForm" novalidate>
+  
+  <div class="form-group col-md-10" [ngClass]="{
+                                              'has-success':description.valid && (description.dirty || description.touched),
+                                              'has-danger':description.invalid && (description.dirty || description.touched)
+                                              }" >
+    <label for="commentDescription">Description</label>
+    <textarea class="form-control" id="commentDescription" rows="5" formControlName="description"></textarea>
+    <div class="form-control-feedback"
+         *ngIf="description.errors && (description.dirty || description.touched)">
+      <p *ngIf="description.errors.required">Description is Required!</p> 
+      <p *ngIf="description.errors.minlength">Description must contain at least 5 characters!</p>
+      <p *ngIf="description.errors.maxlength">Description must contain maximum 1000 characters!</p>        
+    </div>
+  </div>
+  <div class="form-group col-md-6">
+    <button type="button" class="btn btn-primary" (click)="onSubmit()" >Save</button>
+  </div>
+</form>

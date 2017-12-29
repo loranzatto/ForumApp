@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ForumApp.Interfaces
 {
-    interface ITopicModel
+    public interface ICommentModel
     {
-      void insert(Topic topic);
-      List<Topic> get();
+      void insert(Comment comment);
+      List<Comment> get(int topicId);
     }
 }

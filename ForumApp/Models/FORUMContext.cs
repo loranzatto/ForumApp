@@ -8,6 +8,7 @@ namespace ForumApp.Models
     {
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Topic> Topic { get; set; }
+        public virtual DbSet<Comment> Comment { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -75,12 +76,42 @@ namespace ForumApp.Models
 
                 entity.Property(e => e.UserId)
                     .IsRequired()
-                    .HasColumnName("UserId")
+                    .HasColumnName("userId")
                     .HasMaxLength(15)
                     .IsUnicode(false);
 
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
             });
-        }
+
+            modelBuilder.Entity<Comment>(entity =>
+            {
+              entity.Property(e => e.Id)
+                  .HasColumnName("id")
+                  .IsUnicode(false)
+                  .ValueGeneratedOnAdd()
+                  .UseSqlServerIdentityColumn();
+
+              entity.Property(e => e.CreationDate).HasColumnType("datetime");              
+
+              entity.Property(e => e.Description)
+                  .IsRequired()
+                  .HasColumnName("description")
+                  .HasMaxLength(1000)
+                  .IsUnicode(false);
+
+              entity.Property(e => e.TopicId)
+                  .IsRequired()
+                  .HasColumnName("topicId")
+                  .IsUnicode(false);
+
+              entity.Property(e => e.UserId)
+                   .IsRequired()
+                   .HasColumnName("userId")
+                   .HasMaxLength(15)
+                   .IsUnicode(false);
+
+              entity.Property(e => e.UpdateDate).HasColumnType("datetime");
+            });
+    }
     }
 }

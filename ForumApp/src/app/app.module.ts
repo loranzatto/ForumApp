@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap';
+import {MatButtonModule} from '@angular/material'
 
 
 import { AppComponent } from './app.component';
@@ -20,13 +21,24 @@ import { SignInFormComponent } from './sign-in-form/sign-in-form.component';
 import { TopicFormComponent } from './topic-form/topic-form.component';
 import { CommentFormComponent } from './comment-form/comment-form.component';
 import { Globals } from './globals';
+import { TopicListFormComponent } from './topic-list-form/topic-list-form.component';
+import { DataGrid } from './shared/datagrid/datagrid.component';
+import { DataGridUtil } from './shared/datagrid/datagrid.util';
+import { Format } from './shared/datagrid/format';
+import { OrderBy } from './shared/datagrid/orderby';
+import {SearchComponent } from './shared/search.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { CommentListFormComponent } from './comment-list-form/comment-list-form.component';
 
 
 const routes : Routes = [
-  { path: '', component: UserFormComponent, pathMatch:'full'},
+  { path: 'comment-list-form', component: CommentListFormComponent},
+
+  { path: 'topic-list-form', component: TopicListFormComponent},
   { path: 'user-form', component: UserFormComponent},
   { path: 'sign-in-form', component: SignInFormComponent},
-  { path: 'topic-form', component: TopicFormComponent}
+  { path: 'topic-form', component: TopicFormComponent},
+  { path: 'comment-form', component: CommentFormComponent}
 ];
 
 @NgModule({
@@ -34,26 +46,30 @@ const routes : Routes = [
     AppComponent,
     UserFormComponent,    
     HeaderFormComponent, 
-    SignInFormComponent, TopicFormComponent, CommentFormComponent    
+    SignInFormComponent, TopicFormComponent, CommentFormComponent, TopicListFormComponent,
+    DataGrid, Format, OrderBy , SearchComponent, CommentListFormComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    RouterModule,
+    RouterModule.forRoot(routes, {useHash: true}),
     ToastModule.forRoot(),
     BrowserAnimationsModule,
     RouterModule.forRoot(routes, {useHash: true}),
     BsDropdownModule.forRoot(),
     BrowserModule.withServerTransition({appId: 'ngx-bootstrap'}),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    MatButtonModule,
+    MatProgressSpinnerModule
     
+  ],
+  exports: [
+    MatButtonModule
   ],
   entryComponents:[SignInFormComponent],
   providers: [AppService, ToastOptions, BsModalService, Globals],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-  public static sessionId: string;
- }
+export class AppModule { }

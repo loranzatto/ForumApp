@@ -16,12 +16,13 @@ namespace ForumApp.Controllers
   {
     private IUserModel _iUserModel;
     private ITopicModel _iTopicModel;
-
+    private ICommentModel _iCommentModel;
 
     public ForumController()
     {
       _iUserModel = new UserModel();
       _iTopicModel = new TopicModel();
+      _iCommentModel = new CommentModel();
 
     }
     // GET: api/<controller>
@@ -89,13 +90,35 @@ namespace ForumApp.Controllers
             if (processType != "get")
             {
               _iTopicModel.insert(topic);
+            }else
+            {
+              returnedObject = _iTopicModel.get();
             }
+
+            break;
+          }
+        case "Comment":
+          {
+            Comment comment = new Comment();
+            returnedObject = new Comment();
+
+            comment.Description = json.Description;
+            comment.TopicId = json.TopicId;
+            comment.UserId = json.UserId;
+            comment.CreationDate = DateTime.Now;
+
+            if (processType != "get")
+            {
+              _iCommentModel.insert(comment);
+            }
+            else
+            {
+              returnedObject = _iCommentModel.get(comment.TopicId);
+            }
+
             break;
           }
       }
-
-      
-
       return returnedObject != null ? returnedObject : null;
     }
 

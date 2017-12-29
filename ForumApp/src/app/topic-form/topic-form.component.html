@@ -18,7 +18,7 @@
                                                 'has-danger':description.invalid && (description.dirty || description.touched)
                                                 }" >
       <label for="topicDescription">Description</label>
-      <input id="topicDescription" type="textarea" class="form-control" formControlName="description">
+      <textarea class="form-control" id="topicDescription" rows="5" formControlName="description"></textarea>       
       <div class="form-control-feedback"
            *ngIf="description.errors && (description.dirty || description.touched)">
         <p *ngIf="description.errors.required">Description is Required!</p> 

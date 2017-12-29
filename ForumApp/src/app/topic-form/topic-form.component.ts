@@ -66,8 +66,21 @@ export class Topic{
   UpdateDate: Date;
   UserId: string;
   User: User;
+  ProcessType: string;
   ClassType: string;
 
   constructor(){}
+ 
+}
+export interface ITopic{
+  id: number;
+  title: string;
+  description: string;    
+  creationDate: Date;
+  updateDate: Date;
+  userId: string;
+  user: User;
+  classType: string;
+  processType: string;
  
 }
