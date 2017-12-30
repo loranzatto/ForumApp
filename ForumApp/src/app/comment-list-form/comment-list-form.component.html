@@ -1,55 +1,71 @@
 <form [formGroup]="commentListForm" novalidate>
-
-  <div class="form-group col-md-20">
-    <label for="topicTitle">Title</label>
-    <input id="topicTitle" type="text" class="form-control" formControlName="topicTitle">          
-  </div>
-
-  <div class="form-group col-md-20" >
-    <label for="topicDescription">Description</label>
-    <textarea class="form-control" id="topicDescription" rows="5" formControlName="topicDescription"></textarea>       
-  </div>
-  
-  <div class="form-group col-md-6">
-    <button type="button" class="btn btn-primary" (click)="openModal(template)" >Add</button>
-  </div>
-
-  <div class='panel panel-primary'>      
-      <div class='panel-body'>
+    <style>
+    div.generalPanel {
+        margin: 70px;
+        border: 1px solid rgb(76, 127, 175);
+    }
+    div.panel {
+        border: 1px solid rgb(76, 127, 175);
+    }
+    </style>
+  <div class="generalPanel">
     
-          <data-grid [columns]="columns"
-                     [data]="commentList"
-                     [gridbtns]="gridbtns"
-                     [hdrbtns]="hdrbtns"
-                     [sort]="sorting"
-                     [isshowfilter]=false
-                     [isExporttoCSV]=false
-                     [exportFileName]="exportFileName"
-                     [filter] = commentfilter
-                     (btnclick)="gridAction($event)">
-          </data-grid>
-    
-        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-          <span class="sr-only">Error:</span>
-          {{msg}}
-        </div>
-      </div>
+    <br>
+    <div class="form-group col-md-12">
+      <h3><strong>IT</strong>Forum - Comments</h3>
+      <hr>
+    </div> 
+    <div class="form-group col-md-5">
+      <label for="topicTitle">Title</label>
+      <input id="topicTitle" type="text" readonly class="form-control" formControlName="topicTitle">          
     </div>
 
-    <br><br>
+    <div class="form-group col-md-12" >
+      <label for="topicDescription">Description</label>
+      <textarea readonly class="form-control" id="topicDescription" rows="5" formControlName="topicDescription"></textarea>       
+    </div>
+    
+    <div class="form-group col-md-6">
+      <button type="button" class="btn btn-primary" (click)="openModal(template)" >Add New Comment</button>
+    </div>
+
+    <div class="form-group col-md-12">
+      <div class='panel panel-primary'>      
+          <div class='panel-body'>
+        
+              <data-grid [columns]="columns"
+                        [data]="commentList"
+                        [gridbtns]="gridbtns"
+                        [hdrbtns]="hdrbtns"
+                        [sort]="sorting"
+                        [isshowfilter]=false
+                        [isExporttoCSV]=false
+                        [exportFileName]="exportFileName"
+                        [filter] = commentfilter
+                        (btnclick)="gridAction($event)">
+              </data-grid>
+        
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              <span class="sr-only">Error:</span>
+              {{msg}}
+            </div>
+          </div>
+        </div>
+     </div>
     <ng-template #template>
+      <div class="modal-body text-left padding">
         <form [formGroup]="commentForm" novalidate>
-  
-            <div class="form-group col-md-10" [ngClass]="{
+            <p class="modal-body text-left"><strong>IT</strong> Forum - Comments</p>
+            <div class="form-group col-md-15" [ngClass]="{
                                                         'has-success':commentDescription.valid && (commentDescription.dirty || commentDescription.touched),
                                                         'has-danger':commentDescription.invalid && (commentDescription.dirty || commentDescription.touched)
                                                         }" >
               <label for="commentDescription">Description</label>
               <textarea class="form-control" id="commentDescription" rows="5" formControlName="commentDescription"></textarea>
               <div class="form-control-feedback"
-                   *ngIf="commentDescription.errors && (commentDescription.dirty || commentDescription.touched)">
+                  *ngIf="commentDescription.errors && (commentDescription.dirty || commentDescription.touched)">
                 <p *ngIf="commentDescription.errors.required">Description is Required!</p> 
                 <p *ngIf="commentDescription.errors.minlength">Description must contain at least 5 characters!</p>
                 <p *ngIf="commentDescription.errors.maxlength">Description must contain maximum 1000 characters!</p>        
@@ -59,6 +75,8 @@
               <button type="button" class="btn btn-primary" (click)="onSubmit()" >Save</button>
             </div>
           </form>
+      </div>
     </ng-template>
-  
+  </div>
+
 </form>

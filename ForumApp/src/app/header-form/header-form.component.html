@@ -8,24 +8,27 @@
     <ul class="navbar-nav mr-auto">
       <li class="nav-item " [routerLinkActive]="['active']"> 
         <a class="nav-link" href="/#/topic-list-form">Home <span class="sr-only">(current)</span></a>
+      </li>      
+      <li class="nav-item" [routerLinkActive]="['active']">
+        <a class="nav-link " href="/#/topic-form">Topic</a> 
       </li>
+      <!--<li class="nav-item" [routerLinkActive]="['active']">
+        <a class="nav-link " href="/#/comment-form;topicId=1">Comments</a> 
+      </li>-->
+    </ul>
+    
+    <form [formGroup]="headerForm" class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" formControlName="search" type="text" placeholder="Search" (keyup)="doSearch($event)">
+      <!--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->      
+    </form>
+    <ul class="navbar-nav mr-auto">
       <li class="nav-item" [routerLinkActive]="['active']">
         <a class="nav-link" href="/#/user-form">Sign-Up</a>
       </li>
       <li class="nav-item" [routerLinkActive]="['active']">
         <a class="nav-link " href="/#/sign-in-form">Sign In</a> 
       </li>
-      <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link " href="/#/topic-form">Topic</a> 
-      </li>
-      <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link " href="/#/comment-form;topicId=1">Comments</a> 
-      </li>
     </ul>
-    
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+
   </div>
 </nav>

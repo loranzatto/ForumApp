@@ -1,26 +1,33 @@
-<div class='panel panel-primary'>
-  <div class='panel-heading'>
-    IT Forum Topics
-  </div>
-  <div class='panel-body'>
+<form novalidate> 
+  <style>
+    div.panel {
+        margin: 70px;
+        border: 1px solid rgb(76, 127, 175);
+    }
+  </style>
+  <div class='panel panel-primary'> 
+    <br>
+    <h3><strong>IT</strong>Forum - Topics</h3>   
+    <div class='panel-body'>
 
-      <data-grid [columns]="columns"
-                 [data]="topicList"
-                 [gridbtns]="gridbtns"
-                 [hdrbtns]="hdrbtns"
-                 [sort]="sorting"
-                 [isshowfilter]=false
-                 [isExporttoCSV]=false
-                 [exportFileName]="exportFileName"
-                 [filter] = topicfilter
-                 (btnclick)="gridAction($event)">
-      </data-grid>
+        <data-grid [columns]="columns"
+                  [data]="topicList"
+                  [gridbtns]="gridbtns"
+                  [hdrbtns]="hdrbtns"
+                  [sort]="sorting"
+                  [isshowfilter]=false
+                  [isExporttoCSV]=false
+                  [exportFileName]="exportFileName"
+                  [filter] = topicfilter
+                  (btnclick)="gridAction($event)">
+        </data-grid>
 
-    <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-      <span class="sr-only">Error:</span>
-      {{msg}}
+      <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        {{msg}}
+      </div>
     </div>
   </div>
-</div>
+</form>

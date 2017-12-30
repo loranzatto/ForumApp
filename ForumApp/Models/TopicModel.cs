@@ -20,5 +20,17 @@ namespace ForumApp.Models
       List<Topic> topicLst = context.Topic.ToList();
       return topicLst;
     }
+    public Topic get(int id)
+    {
+      ForumContext context = getContext();
+      Topic topic = context.Topic.Where(t => t.Id == id).Single();
+      return topic;
+    }
+    public List<Topic> get(string description)
+    {
+      ForumContext context = getContext();
+      List<Topic> topic = context.Topic.Where(t => t.Description == description).ToList();
+      return topic;
+    }
   }
 }

@@ -81,7 +81,7 @@ namespace ForumApp.Controllers
           {
             Topic topic = new Topic();
             returnedObject = new Topic();
-
+            
             topic.Title = json.Title;
             topic.Description = json.Description;
             topic.UserId = json.UserId;
@@ -92,7 +92,19 @@ namespace ForumApp.Controllers
               _iTopicModel.insert(topic);
             }else
             {
-              returnedObject = _iTopicModel.get();
+              if(json.Id != null && json.Id > 0)
+              {
+                topic.Id = json.Id;
+                returnedObject = _iTopicModel.get(topic.Id);
+              }
+              else if(topic.Description.Length > 0)
+              {
+                returnedObject = _iTopicModel.get(topic.Description);
+              }
+              else
+              {
+                returnedObject = _iTopicModel.get();
+              }
             }
 
             break;

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AppService } from '../app.service';
 import { ToastsManager } from 'ng2-toastr';
 import { Globals } from '../globals';
 import { Topic } from '../topic-form/topic-form.component';
 import { User } from '../user-form/user-form.component';
+import { Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
   selector: 'comment-form',
@@ -13,12 +15,16 @@ import { User } from '../user-form/user-form.component';
 })
 export class CommentFormComponent implements OnInit {
 
+  @ViewChild('template') template:TemplateRef<CommentFormComponent>;  
+
   commentForm: FormGroup; 
   description: FormControl;
   topicId: number;
   userId: string;
-
-  constructor(private appService:AppService, private toastr: ToastsManager, private globals:Globals){ }
+  modalRef: BsModalRef;
+  
+  constructor(private appService:AppService,private modalService: BsModalService,
+              private toastr: ToastsManager, private globals:Globals, private router: Router){ }
   
   createFormControls(){    
     this.description = new FormControl('',[Validators.required, Validators.minLength(5), Validators.maxLength(1000)]);       
@@ -32,6 +38,9 @@ export class CommentFormComponent implements OnInit {
     this.createFormControls()
     this.createForm()
   } 
+  openModal(template) {
+    this.modalRef = this.modalService.show(this.template, {class: 'modal-sm'});
+  }
   async onSubmit(){
     
     if(this.commentForm.valid){
@@ -47,7 +56,9 @@ export class CommentFormComponent implements OnInit {
       
       this.appService.add(comment).toPromise().then().catch();
       this.toastr.success('Successfully added comment.', 'Success!');
-      this.commentForm.reset();            
+      this.commentForm.reset();
+      this.modalRef.hide();
+      this.router.navigate(['comment-list-form']);
     }
   }         
 

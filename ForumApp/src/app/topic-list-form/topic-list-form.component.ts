@@ -21,6 +21,7 @@ export class TopicListFormComponent implements OnInit {
   msg: string;
   modalTitle: string;
   modalBtnTitle: string;
+  topicDescription: string;
 
   //Grid Vars start
   columns: any[] = [
@@ -73,11 +74,12 @@ export class TopicListFormComponent implements OnInit {
   constructor(private appService:AppService, private toastr: ToastsManager, private router: Router, private globals:Globals) { }
 
   ngOnInit(){
-    this.loadTopics();
+    this.loadTopics(this.topicDescription);
   }
-  loadTopics(){
+  loadTopics(topicDescription){
     this.topic.ProcessType = 'get';
-    this.topic.ClassType = 'Topic'
+    this.topic.ClassType = 'Topic';
+    this.topic.Description = topicDescription;
     this.appService.get(this.topic)
                    .map(response => {return <ITopic[]>response.json()}).catch(this.appService.handleError)
                    .subscribe(resultArray => {
@@ -94,10 +96,7 @@ export class TopicListFormComponent implements OnInit {
                                                 }, error => console.log("Error :: " + this.appService.handleError));
   }
   gridAction(gridaction: any){
-    console.log(gridaction);
-    //this.router.navigateByUrl(gridaction.action); 
     console.log(gridaction.values[0].value);
-    //this.router.navigate([gridaction.action],)
     this.router.navigate([gridaction.action, { topicId: gridaction.values[0].value }]);
 
   }

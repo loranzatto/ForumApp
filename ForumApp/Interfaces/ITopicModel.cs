@@ -10,5 +10,7 @@ namespace ForumApp.Interfaces
     {
       void insert(Topic topic);
       List<Topic> get();
-    }
+      List<Topic> get(string description);
+      Topic get(int id);
+  }
 }

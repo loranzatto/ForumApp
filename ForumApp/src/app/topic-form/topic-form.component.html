@@ -1,5 +1,19 @@
   <form [formGroup]="topicForm" novalidate>
-    <div class="form-group col-md-20" [ngClass]="{
+      <style>
+          div.generalPanel {
+              margin: 70px;
+              border: 1px solid rgb(76, 127, 175);
+          }
+          div.panel {
+              border: 1px solid rgb(76, 127, 175);
+          }
+          </style>
+    <div class="generalPanel">
+        <div class="form-group col-md-12">
+            <h3><strong>IT</strong>Forum - Topic</h3>
+            <hr>
+          </div> 
+    <div class="form-group col-md-12" [ngClass]="{
                                                   'has-success':title.valid && (title.dirty || title.touched),
                                                   'has-danger':title.invalid && (title.dirty || title.touched)
                                                 }">
@@ -13,7 +27,7 @@
       </div>
     </div>
 
-    <div class="form-group col-md-20" [ngClass]="{
+    <div class="form-group col-md-12" [ngClass]="{
                                                 'has-success':description.valid && (description.dirty || description.touched),
                                                 'has-danger':description.invalid && (description.dirty || description.touched)
                                                 }" >
@@ -28,5 +42,6 @@
     </div>
     <div class="form-group col-md-6">
       <button type="button" class="btn btn-primary" (click)="onSubmit()" >Save</button>
+    </div>
     </div>
   </form>

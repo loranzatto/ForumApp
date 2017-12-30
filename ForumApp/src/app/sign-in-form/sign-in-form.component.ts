@@ -8,6 +8,7 @@ import { AppService } from '../app.service';
 import { ToastsManager } from 'ng2-toastr';
 import { AppModule } from '../app.module';
 import { Globals } from '../globals';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'sign-in-form',
@@ -25,7 +26,7 @@ export class SignInFormComponent implements OnInit {
   message: string;
 
   constructor(private modalService: BsModalService, private appService:AppService, 
-              private toastr: ToastsManager, private globals: Globals) {}
+              private toastr: ToastsManager, private globals: Globals, private router: Router) {}
   
   createFormControls(){    
     this.id = new FormControl('',[Validators.required]);
@@ -73,6 +74,7 @@ export class SignInFormComponent implements OnInit {
                                                      this.globals.sessionId = retUser.id;
                                                      this.toastr.success('Welcome to the IT Forum!', 'Success!')
                                                      this.modalRef.hide();
+                                                     this.router.navigate(['topic-list-form']);
                                                    }
                                                    else{
                                                     this.signInForm.get('id').setErrors({backend: {}});
@@ -84,7 +86,7 @@ export class SignInFormComponent implements OnInit {
     }
   } 
   decline(): void {
-    this.message = 'Declined!';
     this.modalRef.hide();
+    this.router.navigate(['topic-list-form']);
   }
 }
