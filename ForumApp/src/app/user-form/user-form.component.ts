@@ -54,6 +54,8 @@ export class UserFormComponent implements OnInit {
       user.Name = this.userForm.get('name').value;
       user.Email = this.userForm.get('email').value;
       user.Password = this.userForm.get('password').value;
+      user.ProcessType = 'add';
+      user.ClassType = 'User'
       user.CreationDate = null;
       user.UpdateDate = null;
       
@@ -64,10 +66,8 @@ export class UserFormComponent implements OnInit {
       await new Promise(resolve => {this.appService.count(user.Id)
                                                   .map(response => {return <Number>response.json()}).catch(this.appService.handleError)
                                                   .subscribe(resultArray => {count = resultArray;
-                                                                                console.log(count);
                                                                                 if(count > 0){
                                                                                   userNotExist = false;
-                                                                                  console.log(userNotExist);
                                                                                   this.userForm.get('id').setErrors({backend: {}});
                                                                                   this.toastr.error('User ID already exists.', 'Failure!');  
                                                                                 }
@@ -77,7 +77,7 @@ export class UserFormComponent implements OnInit {
 
       
       if(userNotExist){
-        await new Promise(resolve => {this.appService.add(user).toPromise().then(data => {resolve()}).catch()});
+        await new Promise(resolve => {this.appService.post(user).toPromise().then(data => {resolve()}).catch()});
         this.toastr.success('Successfully added user.', 'Success!');
         this.userForm.reset();
       }      

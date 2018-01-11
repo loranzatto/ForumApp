@@ -97,7 +97,7 @@ namespace ForumApp.Controllers
                 topic.Id = json.Id;
                 returnedObject = _iTopicModel.get(topic.Id);
               }
-              else if(topic.Description.Length > 0)
+              else if(topic.Description != null && topic.Description.Length > 0)
               {
                 returnedObject = _iTopicModel.get(topic.Description);
               }

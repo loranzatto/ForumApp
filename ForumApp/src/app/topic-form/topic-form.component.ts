@@ -9,8 +9,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { User } from '../user-form/user-form.component';
 import { AppModule } from '../app.module';
-import { Globals } from '../globals';
-
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'topic-form',
@@ -23,7 +22,7 @@ export class TopicFormComponent implements OnInit {
   title: FormControl;
   description: FormControl;
 
-  constructor(private appService:AppService, private toastr: ToastsManager, private globals:Globals){ }
+  constructor(private appService:AppService, private toastr: ToastsManager, private authService:AuthService){ }
   
   createFormControls(){    
     this.title = new FormControl('',[Validators.required, Validators.minLength(5), Validators.maxLength(50)]);
@@ -45,13 +44,12 @@ export class TopicFormComponent implements OnInit {
       let topic = new Topic();
       topic.Title = this.topicForm.get('title').value;
       topic.Description = this.topicForm.get('description').value;
-      console.log(this.globals.sessionId);
-      topic.UserId = this.globals.sessionId;  
+      this.authService.currentSessionId.subscribe(sessionId => topic.UserId = sessionId);        
       topic.ClassType = "Topic";    
       topic.CreationDate = null;
       topic.UpdateDate = null;      
       
-      this.appService.add(topic).toPromise().then().catch();
+      this.appService.post(topic).toPromise().then().catch();
       this.toastr.success('Successfully added topic.', 'Success!');
       this.topicForm.reset();
             

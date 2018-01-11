@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AppService } from '../app.service';
 import { ToastsManager } from 'ng2-toastr';
-import { Globals } from '../globals';
+import { AuthService } from '../auth.service';
 import { Comment, IComment } from '../comment-form/comment-form.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
@@ -48,7 +48,7 @@ export class CommentListFormComponent implements OnInit {
           filter: 'textarea'
       },
       {
-          display: 'Opened By',
+          display: 'Topic Id',
           variable: 'topicId',
           filter: 'text'
       },
@@ -86,7 +86,7 @@ export class CommentListFormComponent implements OnInit {
 
   }
   
-  constructor(private appService:AppService, private toastr: ToastsManager, private globals:Globals, 
+  constructor(private appService:AppService, private toastr: ToastsManager, private authService:AuthService, 
               private route: ActivatedRoute, private modalService: BsModalService, private router: Router){
     this.route.params.subscribe(params => { this.topicId = params['topicId'] });
    }
@@ -113,7 +113,9 @@ export class CommentListFormComponent implements OnInit {
     this.loadComments(this.topicId);
   } 
   openModal(template) {
-    if(this.globals.sessionId.length > 0){
+    let tempSessionId: string;
+    this.authService.currentSessionId.subscribe(sessionId => tempSessionId = sessionId)
+    if(tempSessionId.length > 0){
       this.modalRef = this.modalService.show(this.template, {class: 'modal-sm'});
       this.commentForm.get('commentDescription').setValue('');
     }else{
@@ -125,12 +127,11 @@ export class CommentListFormComponent implements OnInit {
     this.topic.ProcessType = 'get';
     this.topic.ClassType = 'Topic';
 
-    await new Promise(resolve => {this.appService.get(this.topic)
+    await new Promise(resolve => {this.appService.post(this.topic)
                                                   .map(response => {return <ITopic[]>response.json()}).catch(this.appService.handleError)
                                                   .subscribe(resultArray => {   
                                                                                 let topicResult: ITopic;                                              
                                                                                 topicResult = resultArray;
-                                                                                console.log('test' + topicResult.title);
 
                                                                                 if(topicResult != null){
                                                                                   this.commentListForm.get('topicTitle').setValue(topicResult.title);
@@ -147,20 +148,12 @@ export class CommentListFormComponent implements OnInit {
     this.comment.ClassType = 'Comment';
     this.comment.TopicId = topicId;
 
-    await new Promise(resolve => {this.appService.get(this.comment)
+    await new Promise(resolve => {this.appService.post(this.comment)
                                                   .map(response => {return <IComment[]>response.json()}).catch(this.appService.handleError)
                                                   .subscribe(resultArray => {
-                                                                                console.log(this.commentList);
-                                                                                console.log(this.commentList);
-
                                                                                 this.commentList = resultArray;
-                                                                                console.log(this.commentList);
 
-                                                                                if(this.commentList != null){
-                                                                                  console.log(this.commentList.length);
-                                                                                  //this.initGridButton();                                                   
-                                                                                }
-                                                                                else{
+                                                                                if(this.commentList == null){
                                                                                   this.toastr.error('There are no comments found!', 'Failure!')
                                                                                 };
                                                                                 resolve();
@@ -172,16 +165,14 @@ export class CommentListFormComponent implements OnInit {
     if(this.commentForm.valid){
       let comment = new Comment();
       comment.Description = this.commentForm.get('commentDescription').value;
-      console.log(comment.Description);
       comment.TopicId = this.topicId;
-      comment.UserId = this.globals.sessionId; 
-      console.log(comment.UserId); 
+      this.authService.currentSessionId.subscribe(sessionId => comment.UserId = sessionId);
       comment.ClassType = "Comment"; 
       comment.ProcessType = "Add";
       comment.CreationDate = null;
       comment.UpdateDate = null;      
       
-      await new Promise(resolve => {this.appService.add(comment)
+      await new Promise(resolve => {this.appService.post(comment)
                                                     .map(response => response.json())
                                                     .subscribe(resultArray => { 
                                                                                 this.toastr.success('Successfully added comment.', 'Success!');

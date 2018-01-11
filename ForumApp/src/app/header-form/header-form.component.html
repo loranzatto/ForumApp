@@ -7,7 +7,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item " [routerLinkActive]="['active']"> 
-        <a class="nav-link" href="/#/topic-list-form">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/#/topic-list-form">Home</a>
       </li>      
       <li class="nav-item" [routerLinkActive]="['active']">
         <a class="nav-link " href="/#/topic-form">Topic</a> 
@@ -18,17 +18,30 @@
     </ul>
     
     <form [formGroup]="headerForm" class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" formControlName="search" type="text" placeholder="Search" (keyup)="doSearch($event)">
+      <input class="form-control mr-sm-2" formControlName="search" type="text" placeholder="Search" (keypress)='doSearch($event)'>
       <!--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->      
     </form>
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" href="/#/user-form">Sign-Up</a>
+        <a class="nav-link" href="/#/user-form" *ngIf="!isAuthenticated">Sign Up</a>
       </li>
       <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link " href="/#/sign-in-form">Sign In</a> 
+        <a class="nav-link " href="/#/sign-in-form" *ngIf="!isAuthenticated">Sign In</a> 
+      </li>
+      <li class="nav-item" >
+        <div class="dropdown" *ngIf="isAuthenticated">
+          <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{userId}}
+          </a>
+        
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" (click)='signOut()'>Sign Out</a> 
+          </div>
+        </div>            
       </li>
     </ul>
+
+    
 
   </div>
 </nav>

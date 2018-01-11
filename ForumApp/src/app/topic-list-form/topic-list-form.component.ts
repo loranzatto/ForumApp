@@ -2,10 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ITopic, Topic } from '../topic-form/topic-form.component';
 import { AppService } from '../app.service';
 import { ToastsManager } from 'ng2-toastr';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RoutesRecognized } from '@angular/router';
 import { concat } from 'rxjs/observable/concat';
 import { Route } from '@angular/router/src/config';
-import { Globals } from '../globals';
+import { setDefaultService } from 'selenium-webdriver/edge';
+import { AppComponent } from '../app.component';
+import { Location } from '@angular/common';
+import { Observable } from 'rxjs/Observable';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'topic-list-form',
@@ -21,7 +25,6 @@ export class TopicListFormComponent implements OnInit {
   msg: string;
   modalTitle: string;
   modalBtnTitle: string;
-  topicDescription: string;
 
   //Grid Vars start
   columns: any[] = [
@@ -52,14 +55,14 @@ export class TopicListFormComponent implements OnInit {
       }
   ];
   sorting: any = {
-      column: 'Id',
-      descending: false
+      column: 'id',
+      descending: true
   };
+  
   hdrbtns: any[] = [];
   gridbtns: any[] = [];
-  initGridButton() {
 
-      
+  initGridButton() {      
       this.gridbtns = [
           {
               title: 'Details / Comments',
@@ -67,38 +70,40 @@ export class TopicListFormComponent implements OnInit {
               action: 'comment-list-form',
               ishide: this.isREADONLY
           }
-
       ];
-
   }
-  constructor(private appService:AppService, private toastr: ToastsManager, private router: Router, private globals:Globals) { }
+  constructor(private appService:AppService, private toastr: ToastsManager, 
+              private router: Router, private authService:AuthService) { 
 
-  ngOnInit(){
-    this.loadTopics(this.topicDescription);
+  }  
+  async ngOnInit(){
+    await new Promise(resolve => {this.appService.currentMessage.subscribe(message => this.loadTopics(message)); resolve()}); 
+    this.appService.changeMessage(""); 
   }
-  loadTopics(topicDescription){
+  
+  async loadTopics(topicDescription){
+
     this.topic.ProcessType = 'get';
     this.topic.ClassType = 'Topic';
-    this.topic.Description = topicDescription;
-    this.appService.get(this.topic)
-                   .map(response => {return <ITopic[]>response.json()}).catch(this.appService.handleError)
-                   .subscribe(resultArray => {
-                                                  this.topicList = resultArray;
-                                                  console.log(this.topicList);
+    this.topic.Description = topicDescription;    
+                                                        
+    await new Promise(resolve => {this.appService.post(this.topic)
+                                                 .map(response => {return <ITopic[]>response.json()}).catch(this.appService.handleError)
+                                                 .subscribe(resultArray => {
+                                                                             this.topicList = resultArray;
 
-                                                  if(this.topicList != null){
-                                                    console.log(this.topicList.length);
-                                                    this.initGridButton();                                                   
-                                                  }
-                                                  else{
-                                                    this.toastr.error('There are no topics found!', 'Failure!')
-                                                  };
-                                                }, error => console.log("Error :: " + this.appService.handleError));
+                                                                             if(this.topicList != null){
+                                                                               this.initGridButton();                                                   
+                                                                             }
+                                                                             else{
+                                                                               this.toastr.error('There are no topics found!', 'Failure!')
+                                                                             };
+                                                                             resolve();
+                                                                            }, error => console.log("Error :: " + this.appService.handleError));
+                                 });
   }
   gridAction(gridaction: any){
-    console.log(gridaction.values[0].value);
     this.router.navigate([gridaction.action, { topicId: gridaction.values[0].value }]);
-
   }
 
 }

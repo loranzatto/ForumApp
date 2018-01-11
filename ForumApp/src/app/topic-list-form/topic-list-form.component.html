@@ -1,32 +1,43 @@
 <form novalidate> 
   <style>
-    div.panel {
+    div.generalPanel {
         margin: 70px;
         border: 1px solid rgb(76, 127, 175);
     }
+    div.panel {
+        border: 1px solid rgb(76, 127, 175);
+    }
   </style>
-  <div class='panel panel-primary'> 
-    <br>
-    <h3><strong>IT</strong>Forum - Topics</h3>   
-    <div class='panel-body'>
+  <div class="generalPanel">
+    <div class='panel panel-primary'> 
+      <br>
+      <div class="form-group col-md-12">
+        <h3><strong>IT</strong>Forum - Recent Topics</h3>
+        <hr>
+      </div> 
 
-        <data-grid [columns]="columns"
-                  [data]="topicList"
-                  [gridbtns]="gridbtns"
-                  [hdrbtns]="hdrbtns"
-                  [sort]="sorting"
-                  [isshowfilter]=false
-                  [isExporttoCSV]=false
-                  [exportFileName]="exportFileName"
-                  [filter] = topicfilter
-                  (btnclick)="gridAction($event)">
-        </data-grid>
+      <div class="form-group col-md-12">
+        <div class='panel'>
 
-      <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        {{msg}}
+            <data-grid [columns]="columns"
+                      [data]="topicList"
+                      [gridbtns]="gridbtns"
+                      [hdrbtns]="hdrbtns"
+                      [sort]="sorting"
+                      [isshowfilter]=false
+                      [isExporttoCSV]=false
+                      [exportFileName]="exportFileName"
+                      [filter] = topicfilter
+                      (btnclick)="gridAction($event)">
+            </data-grid>
+
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+          </div>
+        </div>
       </div>
     </div>
   </div>

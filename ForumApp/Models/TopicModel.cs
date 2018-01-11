@@ -10,27 +10,39 @@ namespace ForumApp.Models
   {
     public void insert(Topic topic)
     {
-        ForumContext context = getContext();
+      using (var context = new ForumContext())
+      {        
         context.Topic.Add(topic);
         context.SaveChanges();
+        context.Dispose();
+      }
     }
     public List<Topic> get()
     {
-      ForumContext context = getContext();
-      List<Topic> topicLst = context.Topic.ToList();
-      return topicLst;
+      using (var context = new ForumContext())
+      {
+        List<Topic> topicLst = context.Topic.OrderByDescending(t => t.Id).ToList();
+        context.Dispose();
+        return topicLst;
+      }
     }
     public Topic get(int id)
     {
-      ForumContext context = getContext();
-      Topic topic = context.Topic.Where(t => t.Id == id).Single();
-      return topic;
+      using (var context = new ForumContext())
+      {
+        Topic topic = context.Topic.Where(t => t.Id == id).Single();
+        context.Dispose();
+        return topic;
+      }        
     }
     public List<Topic> get(string description)
     {
-      ForumContext context = getContext();
-      List<Topic> topic = context.Topic.Where(t => t.Description == description).ToList();
-      return topic;
+      using(var context = new ForumContext())
+      {
+        List<Topic> topic = context.Topic.Where(t => t.Description.Contains(description)).OrderByDescending(t => t.Id).ToList();
+        context.Dispose();
+        return topic;
+      }
     }
   }
 }

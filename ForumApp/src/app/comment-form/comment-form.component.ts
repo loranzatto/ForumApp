@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AppService } from '../app.service';
 import { ToastsManager } from 'ng2-toastr';
-import { Globals } from '../globals';
+import { AuthService } from '../auth.service';
 import { Topic } from '../topic-form/topic-form.component';
 import { User } from '../user-form/user-form.component';
 import { Router } from '@angular/router';
@@ -24,7 +24,7 @@ export class CommentFormComponent implements OnInit {
   modalRef: BsModalRef;
   
   constructor(private appService:AppService,private modalService: BsModalService,
-              private toastr: ToastsManager, private globals:Globals, private router: Router){ }
+              private toastr: ToastsManager, private authService:AuthService, private router: Router){ }
   
   createFormControls(){    
     this.description = new FormControl('',[Validators.required, Validators.minLength(5), Validators.maxLength(1000)]);       
@@ -46,15 +46,14 @@ export class CommentFormComponent implements OnInit {
     if(this.commentForm.valid){
       let comment = new Comment();
       comment.Description = this.commentForm.get('description').value;
-      console.log(this.globals.sessionId);
       comment.TopicId = this.topicId;
-      comment.UserId = this.globals.sessionId;  
+      this.authService.currentSessionId.subscribe(sessionId => comment.UserId = sessionId);
       comment.ClassType = "Comment"; 
       comment.ProcessType = "Add";
       comment.CreationDate = null;
       comment.UpdateDate = null;      
       
-      this.appService.add(comment).toPromise().then().catch();
+      this.appService.post(comment).toPromise().then().catch();
       this.toastr.success('Successfully added comment.', 'Success!');
       this.commentForm.reset();
       this.modalRef.hide();

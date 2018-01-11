@@ -56,8 +56,7 @@ namespace ForumApp.Models
             {
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .IsUnicode(false)
-                    .ValueGeneratedOnAdd()             
+                    .IsUnicode(false)                             
                     .UseSqlServerIdentityColumn();
 
               entity.Property(e => e.CreationDate).HasColumnType("datetime");

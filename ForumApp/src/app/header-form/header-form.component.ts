@@ -1,6 +1,11 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
+import { AppService } from '../app.service';
+import { TopicListFormComponent } from '../topic-list-form/topic-list-form.component';
+import { Location } from '@angular/common';
+import { AuthService } from '../auth.service';
+import { ToastsManager } from 'ng2-toastr';
 
 @Component({
   selector: 'header-form',
@@ -11,9 +16,17 @@ export class HeaderFormComponent implements OnInit {
 
   headerForm: FormGroup; 
   search: FormControl;
-  
+  private isAuthenticated = false; 
+  private userId: string; 
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private appService: AppService, 
+              private toastr: ToastsManager, private authService: AuthService) {
+    this.authService.currentSessionId.subscribe(message => {
+                                                              this.isAuthenticated = message.length > 0 ? true : false;
+                                                              this.userId = message;
+                                                              console.log(this.isAuthenticated);
+                                                           });
+   }
 
   
   createFormControls(){    
@@ -25,17 +38,20 @@ export class HeaderFormComponent implements OnInit {
     })
   } 
   doSearch(event){
-    console.log('enter 1');
-    console.log(event.keypress);
-
-    if (event.keypress == 13){//if enter then hit the search button
-      console.log('enter 2');
-      this.router.navigate(['topic-list-from', {topicDescription: this.search}]);
+    if (event.keyCode == 13){
+      this.appService.changeMessage(this.headerForm.get('search').value);
+      this.router.navigate(['topic-list-form']);
     }
   }
   ngOnInit() {
     this.createFormControls()
     this.createForm()
+  }
+  signOut(){
+    this.userId = '';
+    this.authService.signOut();
+    this.toastr.warning('You are logged out! Please do not stay away so long!', 'Sign Out!');
+    this.router.navigate(['topic-list-form']);
   }
 
 }

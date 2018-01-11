@@ -20,7 +20,6 @@ import { HeaderFormComponent } from './header-form/header-form.component';
 import { SignInFormComponent } from './sign-in-form/sign-in-form.component';
 import { TopicFormComponent } from './topic-form/topic-form.component';
 import { CommentFormComponent } from './comment-form/comment-form.component';
-import { Globals } from './globals';
 import { TopicListFormComponent } from './topic-list-form/topic-list-form.component';
 import { DataGrid } from './shared/datagrid/datagrid.component';
 import { DataGridUtil } from './shared/datagrid/datagrid.util';
@@ -29,11 +28,12 @@ import { OrderBy } from './shared/datagrid/orderby';
 import {SearchComponent } from './shared/search.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { CommentListFormComponent } from './comment-list-form/comment-list-form.component';
+import { Location } from '@angular/common';
+import { AuthService } from './auth.service';
 
 
 const routes : Routes = [
   { path: 'comment-list-form', component: CommentListFormComponent},
-
   { path: 'topic-list-form', component: TopicListFormComponent},
   { path: 'user-form', component: UserFormComponent},
   { path: 'sign-in-form', component: SignInFormComponent},
@@ -69,7 +69,7 @@ const routes : Routes = [
     MatButtonModule
   ],
   entryComponents:[SignInFormComponent],
-  providers: [AppService, ToastOptions, BsModalService, Globals],
+  providers: [AppService, ToastOptions, BsModalService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

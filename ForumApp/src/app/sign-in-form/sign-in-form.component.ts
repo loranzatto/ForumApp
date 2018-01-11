@@ -7,8 +7,8 @@ import { User, UserFormComponent, IUser } from '../user-form/user-form.component
 import { AppService } from '../app.service';
 import { ToastsManager } from 'ng2-toastr';
 import { AppModule } from '../app.module';
-import { Globals } from '../globals';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'sign-in-form',
@@ -26,7 +26,7 @@ export class SignInFormComponent implements OnInit {
   message: string;
 
   constructor(private modalService: BsModalService, private appService:AppService, 
-              private toastr: ToastsManager, private globals: Globals, private router: Router) {}
+              private toastr: ToastsManager, private authService: AuthService, private router: Router) {}
   
   createFormControls(){    
     this.id = new FormControl('',[Validators.required]);
@@ -63,25 +63,23 @@ export class SignInFormComponent implements OnInit {
       user.ProcessType = 'get';
       user.ClassType = 'User';
       let retUser:IUser;
-      this.appService.get(user)
+      this.appService.post(user)
                      .map(response => {return <IUser>response.json()}).catch(this.appService.handleError)
                      .subscribe(resultArray => {
-                                                   retUser = resultArray;
-                                                   console.log(retUser);
+                                                  retUser = resultArray;
 
-                                                   if(retUser != null){
-                                                     console.log(retUser.id);
-                                                     this.globals.sessionId = retUser.id;
-                                                     this.toastr.success('Welcome to the IT Forum!', 'Success!')
-                                                     this.modalRef.hide();
-                                                     this.router.navigate(['topic-list-form']);
-                                                   }
-                                                   else{
+                                                  if(retUser != null){
+                                                    this.authService.signIn(retUser.id);
+                                                    this.toastr.success('Welcome ' + retUser.id + '!', 'Sign In!')
+                                                    this.modalRef.hide();
+                                                    this.router.navigate(['topic-list-form']);
+                                                  }
+                                                  else{
                                                     this.signInForm.get('id').setErrors({backend: {}});
                                                     this.signInForm.get('password').setErrors({backend: {}});
                                                     this.toastr.error('Invalid Username/Password!', 'Failure!')
-                                                   };
-                                                 });
+                                                  };
+                                               });
       
     }
   } 
