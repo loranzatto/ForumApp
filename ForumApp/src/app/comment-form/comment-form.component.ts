@@ -48,12 +48,12 @@ export class CommentFormComponent implements OnInit {
       comment.Description = this.commentForm.get('description').value;
       comment.TopicId = this.topicId;
       this.authService.currentSessionId.subscribe(sessionId => comment.UserId = sessionId);
-      comment.ClassType = "Comment"; 
-      comment.ProcessType = "Add";
       comment.CreationDate = null;
       comment.UpdateDate = null;      
       
-      this.appService.post(comment).toPromise().then().catch();
+      //this.appService.post('comment', comment).toPromise().then().catch();
+      await new Promise(resolve => {this.appService.post('comment', comment).toPromise().then(data => {resolve()}).catch()});
+      console.log("commented inserted");
       this.toastr.success('Successfully added comment.', 'Success!');
       this.commentForm.reset();
       this.modalRef.hide();
@@ -70,9 +70,6 @@ export class Comment{
   UserId: string;
   TopicId: number;
   Topic: Topic;
-  //User: User;
-  ProcessType: string;
-  ClassType: string;
 
   constructor(){}
  

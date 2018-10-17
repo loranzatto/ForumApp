@@ -42,8 +42,8 @@ namespace ForumApp.Controllers
       return 0;
     }
     */
-
-    // POST api/<controller>
+      // POST api/<controller
+    
     [HttpPost]
     public object Post([FromBody] JObject jObject)
     {
@@ -133,6 +133,7 @@ namespace ForumApp.Controllers
       }
       return returnedObject != null ? returnedObject : null;
     }
+      
 
     // PUT api/<controller>/5
     [HttpPut("{id}")]
@@ -146,5 +147,9 @@ namespace ForumApp.Controllers
     public void Delete(int id)
     {
     }
+  }
+  public class Test
+  {
+    public string testName;
   }
 }

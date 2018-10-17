@@ -46,11 +46,10 @@ export class TopicFormComponent implements OnInit {
       topic.Description = this.topicForm.get('description').value;
       this.authService.currentSessionId.subscribe(sessionId => topic.UserId = sessionId);        
       topic.ClassType = "Topic";    
-      topic.CreationDate = null;
-      topic.UpdateDate = null;      
-      
-      this.appService.post(topic).toPromise().then().catch();
-      this.toastr.success('Successfully added topic.', 'Success!');
+      topic.CreationDate = new Date();
+            
+      this.appService.post('topic/Insert', topic).toPromise().then().catch();
+      this.toastr.success('Topic added successfully.', 'Success!');
       this.topicForm.reset();
             
     }         

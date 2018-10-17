@@ -123,11 +123,8 @@ export class CommentListFormComponent implements OnInit {
     }    
   }
   async loadComments(topicId){  
-    this.topic.Id = topicId;
-    this.topic.ProcessType = 'get';
-    this.topic.ClassType = 'Topic';
-
-    await new Promise(resolve => {this.appService.post(this.topic)
+ 
+    await new Promise(resolve => {this.appService.post('topic/GetById', topicId)
                                                   .map(response => {return <ITopic[]>response.json()}).catch(this.appService.handleError)
                                                   .subscribe(resultArray => {   
                                                                                 let topicResult: ITopic;                                              
@@ -143,21 +140,16 @@ export class CommentListFormComponent implements OnInit {
                                                                                 resolve();
                                                                               }, error => console.log("Error :: " + error));
                                   });
+    await new Promise(resolve => {this.appService.post('comment/GetByTopic', topicId)
+                                                 .map(response => {return <IComment[]>response.json()}).catch(this.appService.handleError)
+                                                 .subscribe(resultArray => {
+                                                                              this.commentList = resultArray;
 
-    this.comment.ProcessType = 'get';
-    this.comment.ClassType = 'Comment';
-    this.comment.TopicId = topicId;
-
-    await new Promise(resolve => {this.appService.post(this.comment)
-                                                  .map(response => {return <IComment[]>response.json()}).catch(this.appService.handleError)
-                                                  .subscribe(resultArray => {
-                                                                                this.commentList = resultArray;
-
-                                                                                if(this.commentList == null){
-                                                                                  this.toastr.error('There are no comments found!', 'Failure!')
-                                                                                };
-                                                                                resolve();
-                                                                              }, error => console.log("Error :: " + error));
+                                                                              if(this.commentList == null){
+                                                                                this.toastr.error('There are no comments found!', 'Failure!')
+                                                                              };
+                                                                              resolve();
+                                                                            }, error => console.log("Error :: " + error));
                                   });
   }
   async onSubmit(){
@@ -166,29 +158,15 @@ export class CommentListFormComponent implements OnInit {
       let comment = new Comment();
       comment.Description = this.commentForm.get('commentDescription').value;
       comment.TopicId = this.topicId;
+      console.log(this.topicId);
       this.authService.currentSessionId.subscribe(sessionId => comment.UserId = sessionId);
-      comment.ClassType = "Comment"; 
-      comment.ProcessType = "Add";
-      comment.CreationDate = null;
-      comment.UpdateDate = null;      
+      comment.CreationDate = new Date();          
       
-      await new Promise(resolve => {this.appService.post(comment)
-                                                    .map(response => response.json())
-                                                    .subscribe(resultArray => { 
-                                                                                this.toastr.success('Successfully added comment.', 'Success!');
-                                                                                this.modalRef.hide();
-                                                                                this.loadComments(this.topicId);
-                                                                                //this.router.navigate(['comment-list-form', {topicId: this.topicId}]);
-                                                                                resolve();
-                                                                              }, error => console.log("Error :: " + error));
-                                    });
-      
-      
-      //this.loadComments(this.topicId);
+      await new Promise(resolve => {this.appService.post('comment', comment).toPromise().then(data => {resolve()}).catch()});
+      console.log("commented inserted");
+      this.toastr.success('Comment added successfully.', 'Success!');
+      this.modalRef.hide();
+      await this.loadComments(this.topicId);                             
     }
   }
-  gridAction(){
-
-  }
-
 }

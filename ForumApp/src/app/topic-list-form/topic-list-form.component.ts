@@ -21,7 +21,6 @@ export class TopicListFormComponent implements OnInit {
   isREADONLY: boolean = false;
 
   topicList: Topic[];
-  topic: Topic = new Topic();
   msg: string;
   modalTitle: string;
   modalBtnTitle: string;
@@ -77,17 +76,17 @@ export class TopicListFormComponent implements OnInit {
 
   }  
   async ngOnInit(){
-    await new Promise(resolve => {this.appService.currentMessage.subscribe(message => this.loadTopics(message)); resolve()}); 
+    await new Promise(resolve => {this.appService.currentMessage.subscribe(message => this.loadTopics(message.toString())); resolve()}); 
     this.appService.changeMessage(""); 
   }
   
-  async loadTopics(topicDescription){
+  async loadTopics(topicDescription:string){
 
-    this.topic.ProcessType = 'get';
-    this.topic.ClassType = 'Topic';
-    this.topic.Description = topicDescription;    
+    console.log(topicDescription);
+    
+    let urlName = topicDescription.length > 0 ? 'topic/GetByDescription' : 'topic/GetAll';    
                                                         
-    await new Promise(resolve => {this.appService.post(this.topic)
+    await new Promise(resolve => {this.appService.post(urlName, topicDescription)
                                                  .map(response => {return <ITopic[]>response.json()}).catch(this.appService.handleError)
                                                  .subscribe(resultArray => {
                                                                              this.topicList = resultArray;

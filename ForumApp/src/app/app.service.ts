@@ -12,27 +12,19 @@ export class AppService {
 
   constructor(private _httpService: Http) { }
 
-  post(object) {
+  post(url:string, object) {
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
-    let body = JSON.stringify(object);
-    return this._httpService.post('/api/forum/', body, options);
+    let body = JSON.stringify(object);   
+   
+    return this._httpService.post('/api/' + url + '/', body, options);
   }
-  count(Id){
-      return this._httpService.get('/api/forum/'+ Id);
+  count(url:string, id:string){
+      return this._httpService.get('/api/' + url + '/'+ id);
   }  
   changeMessage(message: string) {
     this.messageSource.next(message)
-  }
-  /*
-  post(object){
-    let headers = new Headers({ 'Content-Type': 
-    'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-    let body = JSON.stringify(object);
-    return this._httpService.post('/api/forum/', body, options);
-  }
-  */
+  }  
   public handleError(error: Response) {
     return Observable.throw(error.statusText);
   }

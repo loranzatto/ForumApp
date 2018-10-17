@@ -60,10 +60,9 @@ export class SignInFormComponent implements OnInit {
       let user = new User();
       user.Id = this.signInForm.get('id').value;
       user.Password = this.signInForm.get('password').value;
-      user.ProcessType = 'get';
-      user.ClassType = 'User';
+
       let retUser:IUser;
-      this.appService.post(user)
+      this.appService.post('user/get', user)
                      .map(response => {return <IUser>response.json()}).catch(this.appService.handleError)
                      .subscribe(resultArray => {
                                                   retUser = resultArray;
